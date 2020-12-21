@@ -1,0 +1,21 @@
+---
+- name: "Create database {{ _postgresql__dbis.value.dbname }}"
+  postgresql_db:
+    name: "{{ _postgresql__dbis.value.dbname }}"
+    state: present
+  become_user: postgres
+
+- name: "Remove public role permissions"
+  postgresql_privs:
+    db: "{{ _postgresql__dbis.value.dbname }}"
+    role: PUBLIC
+    state: absent
+    type: database
+    privs: ALL
+  become_user: postgres
+
+- name: "Call role creation"
+  include_tasks: create_roles.yml
+  loop: "{{ _postgresql__dbis.value.roles | dict2items }}"
+  loop_control:
+    loop_var: _postgresql__roles

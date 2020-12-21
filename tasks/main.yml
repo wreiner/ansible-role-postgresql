@@ -1,0 +1,14 @@
+---
+- include_tasks: "install_{{ ansible_os_family }}.yml"
+
+- name: "Call databases, roles and users creation"
+  include_tasks: create_dbs.yml
+  loop: "{{ postgresql__databases_roles | dict2items }}"
+  loop_control:
+    loop_var: _postgresql__dbis
+
+- name: "Call user creation"
+  include_tasks: create_users.yml
+  loop: "{{ postgresql__users | dict2items }}"
+  loop_control:
+    loop_var: _postgresql__user

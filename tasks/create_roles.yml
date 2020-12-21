@@ -1,0 +1,16 @@
+---
+- name: "Create NOLOGIN role {{ _postgresql__roles.value.rolename }}"
+  postgresql_user:
+    db: "{{ _postgresql__dbis.value.dbname }}"
+    name: "{{ _postgresql__roles.value.rolename }}"
+    role_attr_flags: "NOLOGIN"
+  become_user: postgres
+
+- name: "Grant {{ _postgresql__roles.value.privileges }} to role {{ _postgresql__roles.value.rolename }}"
+  postgresql_privs:
+    db: "{{ _postgresql__dbis.value.dbname }}"
+    role: "{{ _postgresql__roles.value.rolename }}"
+    priv: "{{ _postgresql__roles.value.privileges }}"
+    type: "{{ _postgresql__roles.value.type }}"
+    objs: "{{ _postgresql__roles.value.objs }}"
+  become_user: postgres

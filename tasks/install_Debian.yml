@@ -1,0 +1,41 @@
+---
+- name: "Install dependencies"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gpg
+    - acl
+
+- name: "Install the postgresql apt repo key"
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: "Make sure we have the postgresql apt repo installed"
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    state: present
+    update_cache: yes
+
+- name: "Install postgresql and dependencies"
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "postgresql-{{ postgresql__version }}"
+    - "postgresql-contrib-{{ postgresql__version }}"
+
+- name: "Install psycopg2 to use Ansible for postgres setup"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-psycopg2
+    - python3-psycopg2
+
+- name: "Start postgresql"
+  service:
+    name: "postgresql"
+    state: "started"
+    enabled: "true"
