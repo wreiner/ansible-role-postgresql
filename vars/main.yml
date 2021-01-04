@@ -1,0 +1,3 @@
+---
+postgresql__service: postgresql
+#postgresql__additional_conf_dir: /var/lib/postgresql/data/conf.d

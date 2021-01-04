@@ -34,8 +34,10 @@
     - python-psycopg2
     - python3-psycopg2
 
+- include_tasks: "configure.yml"
+
 - name: "Start postgresql"
   service:
-    name: "postgresql"
+    name: "{{ postgresql__service }}"
     state: "started"
     enabled: "true"

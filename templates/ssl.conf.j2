@@ -1,0 +1,41 @@
+{{ ansible_managed | comment }}
+
+{% if postgresql__ssl is defined %}
+ssl = on
+ssl_ca_file = '{{ postgresql__ssl_ca_file }}'
+ssl_cert_file = '{{ postgresql__ssl_cert_file }}'
+ssl_key_file = '{{ postgresql__ssl_key_file }}'
+{% endif %}
+
+{% if postgresql__ssl_crl_file is defined %}
+ssl_crl_file = '{{ postgresql__ssl_crl_file }}'
+{% endif %}
+
+{% if postgresql__ssl_ciphers is defined %}
+ssl_ciphers = {{ postgresql__ssl_ciphers }}
+ssl_prefer_server_ciphers = on
+{% endif %}
+
+{% if postgresql__ssl_ecdh_curve is defined %}
+ssl_ecdh_curve = '{{ postgresql__ssl_ecdh_curve }}'
+{% endif %}
+
+{% if postgresql__ssl_min_protocol_version is defined %}
+ssl_min_protocol_version = '{{ postgresql__ssl_min_protocol_version }}'
+{% endif %}
+
+{% if postgresql__ssl_max_protocol_version is defined %}
+ssl_max_protocol_version = '{{ postgresql__ssl_max_protocol_version }}'
+{% endif %}
+
+{% if postgresql__ssl_dh_params_file is defined %}
+ssl_dh_params_file = '{{ postgresql__ssl_dh_params_file }}'
+{% endif %}
+
+{% if postgresql__ssl_passphrase_command is defined %}
+ssl_passphrase_command = '{{ postgresql__ssl_passphrase_command }}'
+{% endif %}
+
+{% if postgresql__ssl_passphrase_command_supports_reload is defined %}
+ssl_passphrase_command_supports_reload = '{{ postgresql__ssl_passphrase_command_supports_reload }}'
+{% endif %}

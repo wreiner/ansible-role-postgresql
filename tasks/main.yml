@@ -6,9 +6,11 @@
   loop: "{{ postgresql__databases_roles | dict2items }}"
   loop_control:
     loop_var: _postgresql__dbis
+  when: postgresql__databases_roles is defined
 
 - name: "Call user creation"
   include_tasks: create_users.yml
   loop: "{{ postgresql__users | dict2items }}"
   loop_control:
     loop_var: _postgresql__user
+  when: postgresql__users is defined

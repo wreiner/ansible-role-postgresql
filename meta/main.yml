@@ -1,0 +1,19 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: postgresql
+  author: wreiner
+  description: PostgreSQL server for Debian.
+  company: "wreiner.at"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - 10
+  galaxy_tags:
+    - database
+    - postgresql
+    - db
+    - sql

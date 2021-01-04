@@ -1,0 +1,29 @@
+---
+- name: "Create include dir for config files"
+  file:
+    path: "{{ postgresql__additional_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Deploy ssl config"
+  template:
+    src: "ssl.conf.j2"
+    dest: "{{ postgresql__additional_conf_dir }}/ssl.conf"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  when: postgresql__ssl is defined
+  notify: "Restart PostgreSQL daemon"
+
+- name: Generate DH Parameters with a different size (2048 bits)
+  community.crypto.openssl_dhparam:
+    path: "{{ postgresql__ssl_dh_params_file }}"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+    size: 2048
+  when: postgresql__ssl_dh_params_file is defined
+
+  #/var/lib/postgresql/data/pg_hba.conf
