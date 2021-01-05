@@ -9,8 +9,18 @@
 - name: "Grant {{ _postgresql__roles.value.privileges }} to role {{ _postgresql__roles.value.rolename }}"
   postgresql_privs:
     db: "{{ _postgresql__dbis.value.dbname }}"
-    role: "{{ _postgresql__roles.value.rolename }}"
-    priv: "{{ _postgresql__roles.value.privileges }}"
+    roles: "{{ _postgresql__roles.value.rolename }}"
+    privs: "{{ _postgresql__roles.value.privileges }}"
     type: "{{ _postgresql__roles.value.type }}"
-    objs: "{{ _postgresql__roles.value.objs }}"
+    grant_option: no
   become_user: postgres
+
+- name: "Grant role {{ _postgresql__roles.value.rolename }} access to databases {{ _postgresql__dbis.value.dbname }} from all requiring ssl"
+  community.general.postgresql_pg_hba:
+    dest: "/etc/postgresql/{{ postgresql__version }}/main/pg_hba.conf"
+    contype: hostssl
+    users: "{{ _postgresql__roles.value.rolename }}"
+    source: 0.0.0.0/0
+    databases: "{{ _postgresql__dbis.value.dbname }}"
+    method: scram-sha-256
+    create: true

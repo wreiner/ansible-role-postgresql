@@ -3,11 +3,8 @@
   postgresql_user:
     user: "{{ _postgresql__user.value.username }}"
     password: "{{ _postgresql__user.value.password }}"
-  become_user: postgres
-
-- name: "Add user {{ _postgresql__user.value.username }} to role {{ _postgresql__user.value.role }}"
-  postgresql_membership:
-    target_roles: "{{ _postgresql__user.value.role }}"
-    groups: "{{ _postgresql__user.value.username }}"
-    state: "present"
+    role_attr_flags: "LOGIN,INHERIT"
+    groups: "{{ _postgresql__user.value.role }}"
+  environment:
+    PGOPTIONS: "-c password_encryption=scram-sha-256"
   become_user: postgres
