@@ -1,4 +1,4 @@
-# Ansible Role: postrgresql
+# Ansible Role: postgresql
 
 Installs and configures PostgreSQL server on Debian servers.
 
