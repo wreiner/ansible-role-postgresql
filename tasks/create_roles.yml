@@ -12,6 +12,7 @@
     roles: "{{ _postgresql__roles.value.rolename }}"
     privs: "{{ _postgresql__roles.value.privileges }}"
     type: "{{ _postgresql__roles.value.type }}"
+    objs: "{{ _postgresql__roles.value.objs | d('') }}"
     grant_option: no
   become_user: postgres
 
