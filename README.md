@@ -19,6 +19,18 @@ The PostgreSQL version which should be installed must be defined.
 postgresql__version: 13
 ```
 
+Also the main config file must be defined.
+
+```
+postgresql__main_config: "/etc/postgresql/{{ postgresql__version }}/main/postgresql.conf"
+```
+
+In the default configuration PostgreSQL only listens on localhost. To change that behaviour set:
+
+```
+postgresql__listen_addresses: "127.0.0.1,{{ mgmt_ipaddress }}"
+```
+
 Databases are created with one or more roles.
 
 ```
@@ -74,3 +86,5 @@ postgresql__ssl_cert_file: "/etc/postgresql/{{ postgresql__version }}/main/ssl/h
 postgresql__ssl_key_file: "/etc/postgresql/{{ postgresql__version }}/main/ssl/host.example.com-key.pem"
 postgresql__ssl_dh_params_file: "/etc/postgresql/{{ postgresql__version }}/main/ssl/dh_params"
 ```
+
+The ownership and permissions of the certficate and the key will be changed so the files can be deployed by another role before the postgres user exists.

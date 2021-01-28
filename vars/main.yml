@@ -1,3 +1,4 @@
 ---
 postgresql__service: postgresql
+_postgresql__main_config: "/etc/postgresql/13/main/postgresql.conf"
 #postgresql__additional_conf_dir: /var/lib/postgresql/data/conf.d

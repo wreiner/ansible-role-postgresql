@@ -26,4 +26,48 @@
     size: 2048
   when: postgresql__ssl_dh_params_file is defined
 
-  #/var/lib/postgresql/data/pg_hba.conf
+- name: Set owner and permissions of certficate
+  file:
+    path: "{{ postgresql__ssl_cert_file }}"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  when: postgresql__ssl is defined
+  notify: "Restart PostgreSQL daemon"
+
+- name: Set owner and permissions of certficate key
+  file:
+    path: "{{ postgresql__ssl_key_file }}"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  when: postgresql__ssl is defined
+  notify: "Restart PostgreSQL daemon"
+
+# https://www.postgresql.org/docs/13/auth-password.html
+# - name: Set password encryption algorithm to scram-sha-256
+#   lineinfile:
+#     path: "{{ _postgresql__main_config }}"
+#     regexp: "^#password_encryption"
+#     line: "password_encryption = scram-sha-256"
+#   notify: "Restart PostgreSQL daemon"
+
+- name: "Deploy password encryption config"
+  template:
+    src: "passwd_encryption.conf.j2"
+    dest: "{{ postgresql__additional_conf_dir }}/passwd_encryption.conf"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  notify: "Restart PostgreSQL daemon"
+
+- name: "Deploy listen config"
+  template:
+    src: "listen.conf.j2"
+    dest: "{{ postgresql__additional_conf_dir }}/listen.conf"
+    owner: postgres
+    group: postgres
+    mode: "0600"
+  when: postgresql__listen_addresses is defined
+  notify: "Restart PostgreSQL daemon"
+

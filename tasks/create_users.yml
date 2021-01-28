@@ -8,3 +8,25 @@
   environment:
     PGOPTIONS: "-c password_encryption=scram-sha-256"
   become_user: postgres
+
+# - name: "Require SSL for user {{ _postgresql__user.value.username }}"
+#   community.general.postgresql_pg_hba:
+#     dest: "/etc/postgresql/{{ postgresql__version }}/main/pg_hba.conf"
+#     contype: hostssl
+#     users: "{{ _postgresql__roles.value.rolename }}"
+#     source: 0.0.0.0/0
+#     databases: "{{ _postgresql__dbis.value.dbname }}"
+#     method: scram-sha-256
+#     create: true
+
+- name: "Require SSL for user {{ _postgresql__user.value.username }}"
+  community.general.postgresql_pg_hba:
+    dest: "/etc/postgresql/{{ postgresql__version }}/main/pg_hba.conf"
+    contype: hostssl
+    users: "{{ _postgresql__user.value.username }}"
+    source: 0.0.0.0/0
+    databases: all
+    method: scram-sha-256
+    create: true
+  when: _postgresql__user.value.requiressl is defined and _postgresql__user.value.requiressl
+  notify: "Restart PostgreSQL daemon"

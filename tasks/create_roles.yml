@@ -16,12 +16,3 @@
     grant_option: no
   become_user: postgres
 
-- name: "Grant role {{ _postgresql__roles.value.rolename }} access to databases {{ _postgresql__dbis.value.dbname }} from all requiring ssl"
-  community.general.postgresql_pg_hba:
-    dest: "/etc/postgresql/{{ postgresql__version }}/main/pg_hba.conf"
-    contype: hostssl
-    users: "{{ _postgresql__roles.value.rolename }}"
-    source: 0.0.0.0/0
-    databases: "{{ _postgresql__dbis.value.dbname }}"
-    method: scram-sha-256
-    create: true
